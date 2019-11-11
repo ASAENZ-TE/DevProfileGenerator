@@ -1,2 +1,0 @@
-# DevProfileGeneratot
-A profile generator
