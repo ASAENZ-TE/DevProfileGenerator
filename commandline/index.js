@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const fs = require("fs");
 const axios = require("axios");
 const chalk = require("chalk");
+const pdf = require("html-pdf");
 const generateHTML = require("./generateHTML");
 const filename = "index.html";
 const questions = [
@@ -46,15 +47,22 @@ function appendToFile(filename, data) {
   });
 }
 
-function readFile() {
-  fs.readFile("./index.html", (err, data) => {
-    if (err) throw err;
+const readFromFile = page => {
+  fs.readFile(`${page}`, (err, data) => {
+    if (err) console.log(chalk.inverse.red("Uh oh! Look's like there has been an error... error... error..."));
+    return data;
   });
-}
+};
 
-function convertToPDF() {
-  console.log(chalk.yellow("convert to PDF"));
-}
+const convertToPDF = page => {
+  const options = {
+    format: "Legal"
+  };
+  pdf.create(page, options).toFile("./profile.pdf", function(err, res) {
+    if (err) return console.log(chalk.red("Uh oh! Look's like there has been an error... error... error..."));
+    console.log(chalk.green(" We made a PDF!"));
+  });
+};
 
 async function init() {
   try {
