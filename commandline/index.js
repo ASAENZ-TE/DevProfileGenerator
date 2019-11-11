@@ -9,13 +9,13 @@ const questions = [
   {
     type: "input",
     name: "username",
-    message: "What is your GitHub username?"
+    message: "So... what's your GitHub username?"
   },
   {
     type: "list",
-    message: "Out of these options, what is your favorite color?",
+    message: "Out of the following options, what's your favorite color?",
     name: "color",
-    choices: ["green", "blue", "pink", "red"]
+    choices: ["green", "yellow", "blue", "pink", "red"]
   }
 ];
 
@@ -23,14 +23,12 @@ const askQuestions = () => {
   return inquirer.prompt(questions);
 };
 
-function writeToFile(filename, data) {
+const writeToFile = (filename, data) => {
   fs.writeFile(filename, data, function(err) {
-    if (err) {
-      return console.log(err);
-    }
+    if (err) console.log(err);
     console.log(chalk.green("The file has been written successfully!"));
   });
-}
+};
 
 const getGitResponse = data => {
   const queryUrl = `https://api.github.com/users/${data.username}`;
@@ -38,18 +36,9 @@ const getGitResponse = data => {
   return axios.all([axios.get(queryUrl), axios.get(starredUrl)]);
 };
 
-function appendToFile(filename, data) {
-  fs.appendFile(filename, data, function(err) {
-    if (err) {
-      return console.log(err);
-    }
-    console.log(chalk.green("The file has been written successfully!"));
-  });
-}
-
 const readFromFile = page => {
   fs.readFile(`${page}`, (err, data) => {
-    if (err) console.log(chalk.inverse.red("Uh oh! Look's like there has been an error... error... error..."));
+    if (err) console.log(chalk.inverse.red("Uh oh! Looks like there was an error...error...error..."));
     return data;
   });
 };
@@ -59,21 +48,20 @@ const convertToPDF = page => {
     format: "Legal"
   };
   pdf.create(page, options).toFile("./profile.pdf", function(err, res) {
-    if (err) return console.log(chalk.red("Uh oh! Look's like there has been an error... error... error..."));
-    console.log(chalk.green(" We made a PDF!"));
+    if (err) return console.log(chalk.red("Uh oh! Looks like there was an error...error...error..."));
+    console.log(chalk.green("Congratulations! We've successfully created a PDF!"));
   });
 };
 
 async function init() {
   try {
     const data = await askQuestions();
-    const page = await generateHTML.generateHTML(data);
-    await writeToFile(filename, page);
     const responseArr = await getGitResponse(data);
-    const htmlBody = await generateHTML.generateBody(responseArr);
-    await appendToFile(filename, htmlBody);
-  } catch {
-    console.log(chalk.inverse.red("Uh oh! Look's like there has been an error... error... error..."));
+    const page = generateHTML(data, responseArr);
+    writeToFile(filename, page);
+    convertToPDF(page);
+  } catch (error) {
+    console.log(chalk.inverse.red("Uh oh! Looks like there was an error...error...error..."));
   }
 }
 
