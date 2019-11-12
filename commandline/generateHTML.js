@@ -17,12 +17,6 @@ const colors = {
     headerColor: "white",
     photoBorderColor: "#73448C"
   },
-  pink: {
-    wrapperBackground: "#879CDF",
-    headerBackground: "#FF8374",
-    headerColor: "white",
-    photoBorderColor: "#FEE24C"
-  },
   red: {
     wrapperBackground: "#DE9967",
     headerBackground: "#870603",
