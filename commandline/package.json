@@ -4,7 +4,7 @@
   "description": "An application command line utilizing node.js to dynamically create a pdf file from a Github profile",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "chalk": "^2.4.2",
     "electron": "^7.1.1",
     "electron-html-to": "^2.6.0",
